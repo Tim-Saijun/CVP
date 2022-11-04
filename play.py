@@ -1,12 +1,9 @@
-a=eval(input())
-try:
-    print(19/a)
-    b=[]
-    c=b[12]
-except IndexError:
-    print("we ")
-except a==0:
-    print("错误0")
+# 开：先腐蚀，再膨胀
+img = cv2.imread('dige.png')
 
-if __name__ == '__main__':
-    print(2)
+kernel = np.ones((5,5),np.uint8)
+opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+
+cv2.imshow('opening', opening)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

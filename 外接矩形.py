@@ -32,7 +32,7 @@ def rectangle(img):#img是二值图像
     return points,rect
 
 if __name__ == '__main__':
-    o = cv2.imread(r'imgs/1/bb{F798F706-F882-4E3F-8709-FF265AF63BB8}.bmp')
+    o = cv2.imread(r'imgs/1/{10874553-F4CC-4C59-A793-382CCC352A96}.bmp')
     masks=generate_mask_array(o)
     points = []
     centers=[]
@@ -40,7 +40,10 @@ if __name__ == '__main__':
     for i in range (0,5):
         img = masks[i]
         _, binaryzation = cv2.threshold(img, 100, 255, cv2.THRESH_BINARY)
-        tpoints,rect=rectangle(binaryzation)
+        # 开运算：先腐蚀，再膨胀,闭运算反之
+        kernel = np.ones((15, 15), np.uint8)
+        opening = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel,iterations=3)
+        tpoints,rect=rectangle(opening)
         points.append(tpoints)
         centers.append(rect[0])
         whs.append(rect[1])
