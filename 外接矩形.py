@@ -70,9 +70,9 @@ if __name__ == '__main__':
                 img = masks[i]
                 _, binaryzation = cv2.threshold(img, 100, 255, cv2.THRESH_BINARY)
                 # 开运算：先腐蚀，再膨胀,闭运算反之
-                kernel = np.ones((15, 15), np.uint8)
-                opening = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel,iterations=3)
-                tpoints,rect=rectangle(opening)
+                # kernel = np.ones((15, 15), np.uint8)
+                # opening = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel,iterations=3)
+                tpoints,rect=rectangle(binaryzation)
                 points.append(tpoints)
                 centers.append(rect[0])
                 whs.append(rect[1])
