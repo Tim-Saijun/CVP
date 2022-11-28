@@ -20,7 +20,7 @@ def rectangle(img):#img是二值图像
     #rect [(中心x,中心y),(长,宽),偏转角度]
     # print("返回值rect:\n",rect)
     points = cv2.boxPoints(rect)
-    print("\n转换后的points：\n",points)
+    # print("\n转换后的points：\n",points)
     points=np.int0(points)#取整
 
     return points,rect
@@ -47,8 +47,41 @@ def outfit(o,name):
     print(name)
     cv2.imwrite(name,image)
 
+def measure_im(img):
+    #直接从内存中传过来图片，也返回图片
+    # 直接传入模型分割的图片，返回测距的图片与距离信息
+    #     o = cv2.imread(img)
+        o = img
+        try:
+            masks = generate_mask_array(o)
+            points = []
+            centers = []
+            whs = []
+            for i in range(0, 5):
+                img = masks[i]
+                _, binaryzation = cv2.threshold(img, 100, 255, cv2.THRESH_BINARY)
+                # 开运算：先腐蚀，再膨胀,闭运算反之
+                # kernel = np.ones((15, 15), np.uint8)
+                # opening = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel,iterations=3)
+                tpoints, rect = rectangle(binaryzation)
+                points.append(tpoints)
+                centers.append(rect[0])
+                whs.append(rect[1])
+
+            image = cv2.drawContours(o, points, -1, (255, 255, 255), 1)
+            for i in range(0, 5):
+                image = cv2.putText(image, "w:%d h:%d" % (whs[i][0], whs[i][1]),
+                                    (int(centers[i][0]), int(centers[i][1])),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
+            return image, whs, centers
+        except:
+            print("错误,图片中目标缺失")
+            #TODO:目标缺失时仍能测距
+
+
+
 if __name__ == '__main__':
-    #直接传入模型分割的图片，返回测距的图片与距离信息
+    #导入一个模型分割的结果图片目录，批量输出测距之后的图片
     imgs=os.listdir(r'/imgs/out')
     count=0
     for img in imgs:
