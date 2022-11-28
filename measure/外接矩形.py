@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import os
-from 提取单色 import generate_mask_array
+from measure.提取单色 import generate_mask_array
 
 def rectangle(img):#img是二值图像
     contours, hierarchy = cv2.findContours(img,
@@ -48,11 +48,12 @@ def outfit(o,name):
     cv2.imwrite(name,image)
 
 if __name__ == '__main__':
-    imgs=os.listdir(r'J:\PlayGround\CVP\imgs\out')
+    #直接传入模型分割的图片，返回测距的图片与距离信息
+    imgs=os.listdir(r'/imgs/out')
     count=0
     for img in imgs:
         name=img
-        img=os.path.join("imgs/out/",img)
+        img=os.path.join("../imgs/out/", img)
         o = cv2.imread(img)
         # try:
         #     outfit(name,o)

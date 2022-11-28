@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from 提取单色 import generate_mask_array
 
-img = cv2.imread('imgs/4/{10874553-F4CC-4C59-A793-382CCC352A96}.bmp')
+img = cv2.imread('../imgs/4/{10874553-F4CC-4C59-A793-382CCC352A96}.bmp')
 mask = img.copy()
 img = generate_mask_array(img)[4]
 

@@ -24,7 +24,7 @@ def generate_mask_array(img):
     return maskarray
 
 if __name__ == '__main__':
-    img = cv2.imread(r'imgs/out/bb{1D4CEA06-0483-4F90-AF69-94D611385A71}.bmp')
+    img = cv2.imread(r'../imgs/out/bb{1D4CEA06-0483-4F90-AF69-94D611385A71}.bmp')
     maskarray=generate_mask_array(img)
     print(maskarray)
     cv2.imshow("img", img)

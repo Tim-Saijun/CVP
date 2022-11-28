@@ -24,7 +24,7 @@ def empty(a):
     return h_min, h_max, s_min, s_max, v_min, v_max
 
 
-path = r'imgs/out/bb{1D4CEA06-0483-4F90-AF69-94D611385A71}.bmp'
+path = r'../imgs/out/bb{1D4CEA06-0483-4F90-AF69-94D611385A71}.bmp'
 # 创建一个窗口，放置6个滑动条
 cv2.namedWindow("TrackBars")
 cv2.resizeWindow("TrackBars", 640, 240)
