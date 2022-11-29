@@ -1,8 +1,13 @@
 import cv2
 import numpy as np
 import os
+import time
+import logging
+import my_logging
 from measure.提取单色 import generate_mask_array
 
+logger = logging.getLogger(__name__)  # 生成logger实例
+my_logging.load_my_logging_cfg("DO_NOT_DEBUG")  # 在你程序文件的入口加载自定义logging配置
 def rectangle(img):#img是二值图像
     contours, hierarchy = cv2.findContours(img,
                                                    cv2.RETR_LIST,
@@ -18,9 +23,9 @@ def rectangle(img):#img是二值图像
     # cv2.drawContours(0,[brcnt],-1,(255,255,255),2)
     rect = cv2.minAreaRect(contours[max_idx])
     #rect [(中心x,中心y),(长,宽),偏转角度]
-    # print("返回值rect:\n",rect)
+    logger.debug("返回值rect:%s\n"%str(rect))
     points = cv2.boxPoints(rect)
-    # print("\n转换后的points：\n",points)
+    logger.debug("转换后的points：%s\n"%str(points))
     points=np.int0(points)#取整
 
     return points,rect
