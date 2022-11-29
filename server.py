@@ -2,7 +2,7 @@ import time
 import logging
 import my_logging
 import cv2
-from flask import Flask, request, jsonify, send_from_directory, render_template
+from flask import Flask, request, jsonify, send_from_directory, render_template,send_file
 from models.BiSeNetOFF.tools.demo import inferenceByBiSeNet
 from  measure.外接矩形 import  measure_im
 
@@ -38,6 +38,7 @@ def inference():
     logger.info("测距时间：%f秒"%time_measure)
     # cv2.imshow("sdf",measimg)
     # cv2.waitKey()
+    cv2.imwrite("return.png",measimg)
     for i in range (0,5):
         logger.info("目标%d长:%s,宽%s"%(i,whs[i][0],whs[i][1]))
     res = {"code": 200,
@@ -46,4 +47,12 @@ def inference():
            "time_measure":time_measure,
            "data":str(whs)}
     return jsonify(res)
+
+@app.route("/download_inference")
+def download_inference():
+    #客户端如何下载图片：https://blog.csdn.net/lzanze/article/details/99706611
+    return send_file("return.png")
 app.run()
+
+
+#TODO:flask接收客户端文件https://www.cnblogs.com/niulang/p/14620913.html
