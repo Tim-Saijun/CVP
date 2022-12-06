@@ -2,6 +2,7 @@ import time
 import logging
 import my_logging
 import cv2
+import os
 from flask import Flask, request, jsonify, send_from_directory, render_template,send_file
 from models.BiSeNetOFF.tools.demo import inferenceByBiSeNet
 from  measure.外接矩形 import  measure_im
@@ -13,15 +14,33 @@ app = Flask("server")
 @app.route("/")
 def hello():
     logger.info("访问主界面")
-    return render_template('test000.html')
+    return render_template('test000.html')\
+
+@app.route("/upload", methods = ['GET','POST'])
+def upload():
+    img_name = request.form.get('img_name')
+    img_data = request.files.get('img')
+    logger.info("成功GET图片")
+    if not os.path.exists('imgs/origin'):
+        os.makedirs('imgs/origin')
+    img_path = os.path.join('imgs','origin',img_name)
+    img_data.save(img_path)
+    if os.path.exists(img_path):
+        logger.info("成功接收图片"+str(img_path))
+        inference(img_path)
+    else:
+        logger.warning("接收图片失败"+str(img_path))
+    res = {"code": 200,
+           'msg': "服务器已成功接收当前选中的图片！"}
+    return jsonify(res)
 
 @app.route("/inference")
-def inference():
+def inference(img_path):
     logger.info("请求模型分割")
     #模型分割
     start_time_inference=time.time()
     logger.debug("分割开始，调用模型中...")
-    img=inferenceByBiSeNet("models/BiSeNetOFF/1.bmp")
+    img=inferenceByBiSeNet(img_path)
     logger.debug("分割结束")
     end_time_inference=time.time()
     # cv2.imshow("sdf",img)
@@ -55,4 +74,4 @@ def download_inference():
 app.run()
 
 
-#TODO:flask接收客户端文件https://www.cnblogs.com/niulang/p/14620913.html
+
