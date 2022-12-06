@@ -27,7 +27,7 @@ def upload():
     img_data.save(img_path)
     if os.path.exists(img_path):
         logger.info("成功接收图片"+str(img_path))
-        inference(img_path)
+        # inference(img_path)
     else:
         logger.warning("接收图片失败"+str(img_path))
     res = {"code": 200,
@@ -41,6 +41,7 @@ def inference(img_path):
     start_time_inference=time.time()
     logger.debug("分割开始，调用模型中...")
     img=inferenceByBiSeNet(img_path)
+    img_name = os.path.basename(img_path)
     logger.debug("分割结束")
     end_time_inference=time.time()
     # cv2.imshow("sdf",img)
@@ -57,7 +58,10 @@ def inference(img_path):
     logger.info("测距时间：%f秒"%time_measure)
     # cv2.imshow("sdf",measimg)
     # cv2.waitKey()
-    cv2.imwrite("return.png",measimg)
+    if not os.path.exists('imgs/result'):
+        os.makedirs('imgs/result')
+    img_path = os.path.join('imgs','result',img_name)
+    cv2.imwrite(img_path,measimg)
     for i in range (0,5):
         logger.info("目标%d长:%s,宽%s"%(i,whs[i][0],whs[i][1]))
     res = {"code": 200,
