@@ -35,11 +35,13 @@ def upload():
     return jsonify(res)
 
 @app.route("/inference")
-def inference(img_path):
+def inference():
     logger.info("请求模型分割")
     #模型分割
+    img_name = request.args['img_name']
+    img_path = os.path.join('imgs', 'origin', img_name)
     start_time_inference=time.time()
-    logger.debug("分割开始，调用模型中...")
+    logger.debug("分割开始，调用模型中..."+str(img_path))
     img=inferenceByBiSeNet(img_path)
     img_name = os.path.basename(img_path)
     logger.debug("分割结束")
@@ -68,13 +70,15 @@ def inference(img_path):
            'msg': "成功响应",
            "time_inference":time_inference,
            "time_measure":time_measure,
-           "data":str(whs)}
+           "whs":str(whs)}
     return jsonify(res)
 
 @app.route("/download_inference")
 def download_inference():
-    #客户端如何下载图片：https://blog.csdn.net/lzanze/article/details/99706611
-    return send_file("return.png")
+    #客户端如何下载图片：https://blog.csdn.net/qq_34663267/article/details/103404120
+    img_name = request.args['img_name']
+    img_path = os.path.join('imgs', 'result', img_name)
+    return send_file(img_path)
 app.run()
 
 
