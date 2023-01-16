@@ -11,7 +11,7 @@ basic_format = '[%(levelname)s][%(asctime)s] %(message)s'
 
 logfile_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # log文件的目录，需要自定义文件路径 # atm
 # logfile_dir = os.path.join(logfile_dir, 'log')  # C:\Users\oldboy\Desktop\atm\log
-logfile_dir = r"J:\PlayGround\CVP"
+logfile_dir = r"D:\PlayGround\CVP"
 logfile_name = 'log.log'  # log文件名，需要自定义路径名
 
 # 如果不存在定义的日志目录就创建一个
