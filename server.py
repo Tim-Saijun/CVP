@@ -79,7 +79,7 @@ def download_inference():
     img_name = request.args['img_name']
     img_path = os.path.join('imgs', 'result', img_name)
     return send_file(img_path)
-app.run()
+app.run(debug=True, host='0.0.0.0', port=5000)
 
 
 
