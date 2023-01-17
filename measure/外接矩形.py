@@ -45,7 +45,7 @@ def outfit(o,name):
         centers.append(rect[0])
         whs.append(rect[1])
 
-    image = cv2.drawContours(o, points, -1, (255, 255, 255), 1)
+    image = cv2.drawContours(o, points, -1, (0, 165, 255), 1)
     for i in range(0, 5):
         image = cv2.putText(image, "w:%d h:%d" % (whs[i][0], whs[i][1]), (int(centers[i][0]), int(centers[i][1])),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
@@ -73,7 +73,7 @@ def measure_im(img):
                 centers.append(rect[0])
                 whs.append(rect[1])
 
-            image = cv2.drawContours(o, points, -1, (255, 165, 0), 1)
+            image = cv2.drawContours(o, points, -1, (115,235,255), 6)
             for i in range(0, 5):
                 image = cv2.putText(image, "w:%d h:%d" % (whs[i][0], whs[i][1]),
                                     (int(centers[i][0]), int(centers[i][1])),
