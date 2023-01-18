@@ -6,6 +6,7 @@ import os
 from flask import Flask, request, jsonify, send_from_directory, render_template,send_file
 from models.BiSeNetOFF.tools.demo import inferenceByBiSeNet
 from  measure.外接矩形 import  measure_im
+from  measure.背景融合 import  measure_merge
 
 logger = logging.getLogger("server")  # 生成logger实例
 my_logging.load_my_logging_cfg(model='')  # 在你程序文件的入口加载自定义logging配置
@@ -66,6 +67,14 @@ def inference():
     cv2.imwrite(img_path,measimg)
     for i in range (0,5):
         logger.info("目标%d长:%s,宽%s"%(i,whs[i][0],whs[i][1]))
+    #替换背景
+    imgres_path = os.path.join('imgs', 'result', img_name)
+    imgori_path = os.path.join('imgs', 'origin', img_name)
+    mergeimg = measure_merge(imgres_path,imgori_path)
+    if not os.path.exists('imgs/merge'):
+        os.makedirs('imgs/merge')
+    imgmerge_path = os.path.join('imgs', 'merge', img_name)
+    cv2.imwrite(imgmerge_path,mergeimg)
     res = {"code": 200,
            'msg': "成功响应",
            "time_inference":time_inference,
@@ -75,6 +84,13 @@ def inference():
 
 @app.route("/download_inference")
 def download_inference():
+    #客户端如何下载图片：https://blog.csdn.net/qq_34663267/article/details/103404120
+    img_name = request.args['img_name']
+    img_path = os.path.join('imgs', 'merge', img_name)
+    return send_file(img_path)
+
+@app.route("/download_inference_nomerge")
+def download_inference_nomerge():
     #客户端如何下载图片：https://blog.csdn.net/qq_34663267/article/details/103404120
     img_name = request.args['img_name']
     img_path = os.path.join('imgs', 'result', img_name)
