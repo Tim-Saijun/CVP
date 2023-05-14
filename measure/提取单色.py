@@ -7,12 +7,12 @@ import numpy as np
 右心室 深蓝 [108,168,178]
 降主动脉 黄 [26,139,239]
 """
-def generate_mask_array(img):
+def generate_mask_array(img,class_num=5):
     #转到HSV
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     HSV_TABLE=np.array([[1,159,176],[126,105,109], [63,78,182],[108,168,178],[26,139,239]])
     maskarray=[]
-    for i in range (0,5):
+    for i in range (0,class_num):
         #设置阈值
         l_blue = HSV_TABLE[i]
         h_blue = HSV_TABLE[i]

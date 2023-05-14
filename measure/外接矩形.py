@@ -87,12 +87,17 @@ def measure_im(img):
 
 if __name__ == '__main__':
     #导入一个模型分割的结果图片目录，批量输出测距之后的图片
-    imgs=os.listdir(r'/imgs/out')
-    count=0
-    for img in imgs:
-        name=img
-        img=os.path.join("../imgs/out/", img)
-        o = cv2.imread(img)
+            imgs=os.listdir(r'../imgs/out/')
+            count=0
+            class_num = 5
+            for img in imgs:
+                name=img
+                img=os.path.join(r"../imgs/out/", img)
+                #提取文件后缀
+                suffix = os.path.splitext(img)[1]
+                if suffix == ".jpg":
+                    class_num = 1
+                o = cv2.imread(img)
         # try:
         #     outfit(name,o)
         # except IndexError:
@@ -100,12 +105,12 @@ if __name__ == '__main__':
         # except:
         #     continue
         # print("不足五类的数量%d",count)
-        try:
-            masks=generate_mask_array(o)
+        # try:
+            masks=generate_mask_array(o,class_num)
             points = []
             centers=[]
             whs = []
-            for i in range (0,5):
+            for i in range (0,class_num):
                 img = masks[i]
                 _, binaryzation = cv2.threshold(img, 100, 255, cv2.THRESH_BINARY)
                 # 开运算：先腐蚀，再膨胀,闭运算反之
@@ -117,14 +122,15 @@ if __name__ == '__main__':
                 whs.append(rect[1])
 
             image = cv2.drawContours(o, points, -1, (255, 255, 255),1)
-            for i in range (0,5):
+            for i in range (0,class_num):
                  image = cv2.putText(image,"w:%d h:%d"%(whs[i][0],whs[i][1]), (int(centers[i][0]),int(centers[i][1])) ,
                                      cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),1)
             print(name)
             cv2.imwrite(name, image)
-        except:
+        # except:
             count+=1
-            print("错误%d",count)
+
+            print("错误%d"%count)
     # cv2.imshow("result",image)
     # cv2.waitKey()
     # cv2.destroyAllWindows()

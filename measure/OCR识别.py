@@ -4,7 +4,7 @@ from operator import itemgetter
 import numpy as np
 import cv2
 import math
-
+from modelscope.msdatasets import ms_dataset
 # scripts for crop images
 def crop_image(img, position):
     def distance(x1,y1,x2,y2):
@@ -74,8 +74,8 @@ def jugde_value(text):
         return False;
 
 
-ocr_detection = pipeline(Tasks.ocr_detection, model='damo/cv_resnet18_ocr-detection-line-level_damo')
-ocr_recognition = pipeline(Tasks.ocr_recognition, model='damo/cv_convnextTiny_ocr-recognition-general_damo')
+ocr_detection = pipeline(Tasks.ocr_detection, model='damo/cv_resnet18_ocr-detection-line-level_damo',config_file="E:\project\ocrserver\models\modelscope\hub\damo\cv_resnet18_ocr-detection-line-level_damo\configuration.json")
+ocr_recognition = pipeline(Tasks.ocr_recognition, model='damo/cv_convnextTiny_ocr-recognition-general_damo',config_file=r"E:\project\ocrserver\models\modelscope\hub\damo\cv_convnextTiny_ocr-recognition-general_damo\configuration.json")
 img_path = 'table.jpg'
 image_full = cv2.imread(img_path)
 det_result = ocr_detection(image_full)
